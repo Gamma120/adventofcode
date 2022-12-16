@@ -1,7 +1,7 @@
 # Confidentials files
 ownerproof.txt
 
-# template form https://github.com/github/gitignore/blob/main/C.gitignore
+# template from https://github.com/github/gitignore/blob/main/C.gitignore
 
 # Prerequisites
 *.d
