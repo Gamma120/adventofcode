@@ -1,6 +1,9 @@
 # Confidentials files
 ownerproof-*.txt
 
+# Solutions
+output.txt
+
 # template from https://github.com/github/gitignore/blob/main/C.gitignore
 
 # Prerequisites

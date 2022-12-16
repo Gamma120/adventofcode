@@ -1,9 +1,8 @@
-#include "main.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#define BUFF_MAX 15
 
 int *update_list(int num, int *max_list){
     int len = 3;
@@ -32,58 +31,46 @@ int *decrease_rank(int *list, int position){
 }
 
 int main(int argc, char *argv[]){
-    
-    if(argc < 2){
-        printf("Missing argument");
-        exit(1);
+    /*
+    argv[1] : input file
+    argv[2] : output file
+    */
+    if(argc < 3){
+        fprintf(stderr, "Usage: %s <file> <file>\n", argv[0]);
+        exit(EXIT_FAILURE);
     }
     
-    char *file_path = argv[1];
-    FILE *fp;
-    fp = fopen(file_path, "r");
+    char *in_path = argv[1]; char *out_path = argv[2];
+    FILE *in_ptr, *out_ptr;
+    in_ptr = fopen(in_path, "r");
 
-    if(fp == NULL){
-        printf("Error while openning %s", file_path);
-        exit(1);
+    if(in_ptr == NULL){
+        fprintf(stderr, "Error d opening %s : %s", in_path, strerror(errno));
+        exit(EXIT_FAILURE);
     }
 
-    char ch[2];
-    char calories[10];
+    char line[BUFF_MAX];
     int sum = 0;
     int *calories_max = (int *) malloc(sizeof(int)*3);
-    int cpt = 0;
-    while((*ch = fgetc(fp)) != EOF){
-        
-        // newline
-        if(ch[0] == '\n'){
-            // new group
-            if(strnlen(calories, 10) == 0){
-                calories_max = update_list(sum, calories_max);
-                sum = 0; // reset
-            } else{
-                sum += atoi(calories);
-
-                strncat(calories,"\0", 1);
-                calories[0] = '\0';
-            }
-
-        } else {
-            strncat(calories, ch, 1);
+    
+    while(fgets(line,BUFF_MAX,in_ptr) != NULL){
+        // new elf
+        if(line[0] == '\n'){
+            // check if elf is in top 3
+            calories_max = update_list(sum, calories_max);
+            sum = 0;
+        }else{
+            sum += atoi(line);
         }
     }
 
-    // last test
-    calories_max = update_list(sum, calories_max);
+    int ans_p1 = calories_max[0];
+    int ans_p2 = calories_max[0]+calories_max[1]+calories_max[2];
 
-    int ans = 0;
-    for(int i=0; i<3; i++){
-        ans+=calories_max[i];
-    }
-
-    printf("Calories from the elf: %d\n", calories_max[0]);
-    printf("Calories from the 3 elves : %d\n",ans);
-
+    out_ptr = fopen(out_path, "w");
+    fprintf(out_ptr,"%d\n%d", ans_p1, ans_p2);
+    
     free(calories_max);
-    fclose(fp);
-    return 0;
+    fclose(in_ptr); fclose(out_ptr);
+    return EXIT_SUCCESS;
 }
