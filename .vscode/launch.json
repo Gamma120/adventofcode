@@ -6,7 +6,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "args": ["input.txt"],
+            "args": ["input.txt", "output.txt"],
             "cwd": "${fileDirname}",
             "environment": [],
             "preLaunchTask": "C Build: current file"
@@ -16,7 +16,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "args": ["test_input.txt"],
+            "args": ["test_input.txt", "output.txt"],
             "cwd": "${fileDirname}",
             "environment": [{ "name": "config", "value": "Debug" }],
             "preLaunchTask": "C Build: current file"
