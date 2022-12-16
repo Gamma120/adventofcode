@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
     while((*ch = fgetc(fp)) != EOF){
         
         // newline
-        if(ch[0] == 10){
+        if(ch[0] == '\n'){
             // new group
             if(strnlen(calories, 10) == 0){
                 calories_max = update_list(sum, calories_max);
