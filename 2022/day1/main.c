@@ -1,3 +1,5 @@
+#include "main.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,7 +47,7 @@ int main(int argc, char *argv[]){
     in_ptr = fopen(in_path, "r");
 
     if(in_ptr == NULL){
-        fprintf(stderr, "Error d opening %s : %s", in_path, strerror(errno));
+        fprintf(stderr, "Error opening %s : %s", in_path, strerror(errno));
         exit(EXIT_FAILURE);
     }
 
