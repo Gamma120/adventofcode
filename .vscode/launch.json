@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C Launch: current file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": ["input.txt"],
+            "cwd": "${fileDirname}",
+            "environment": [{ "name": "config", "value": "Debug" }],
+            "preLaunchTask": "C Build: current file"
+        }
+    ]
+}
