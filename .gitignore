@@ -1,5 +1,5 @@
 # Confidentials files
-ownerproof.txt
+ownerproof-*.txt
 
 # template from https://github.com/github/gitignore/blob/main/C.gitignore
 

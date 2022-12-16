@@ -8,6 +8,16 @@
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
             "args": ["input.txt"],
             "cwd": "${fileDirname}",
+            "environment": [],
+            "preLaunchTask": "C Build: current file"
+        },
+        {
+            "name": "C Launch Test: current file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": ["test_input.txt"],
+            "cwd": "${fileDirname}",
             "environment": [{ "name": "config", "value": "Debug" }],
             "preLaunchTask": "C Build: current file"
         }
