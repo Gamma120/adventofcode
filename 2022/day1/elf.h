@@ -9,18 +9,24 @@ typedef struct _elf
     struct _elf *next;
 } elf;
 
+typedef struct linked_list
+{
+    int length_max;
+    int length;
+    elf *head;
+    elf *tail;
+} linked_list;
+
 elf *elf_init();
-elf *elf_left_free(elf *elf);
-elf *elf_right_free(elf *elf);
+linked_list *list_init(int length_max);
+void list_free(linked_list *l);
+void left_free(linked_list *l);
+void right_free(linked_list *l);
 
-bool is_empty(elf *head);
+bool is_empty(linked_list *l);
 
-void print_list(elf *head);
+void print_list(linked_list *l);
 
-elf *insert_first(elf *head, elf *_elf);
-elf *insert_last(elf *tail, elf *_elf);
-
-/*
-Insert the elf_to_insert before current_elf
-*/
-void insert(elf *elf_to_insert, elf *current_elf);
+void prepend(linked_list *l, elf *_elf);
+void append(linked_list *l, elf *_elf);
+void insert(linked_list *l, int calories);

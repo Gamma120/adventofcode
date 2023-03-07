@@ -1,8 +1,11 @@
-# Confidentials files
+# Private files
 ownerproof-*.txt
 
 # Solutions
 output.txt
+
+# VSCode
+.vscode
 
 # template from https://github.com/github/gitignore/blob/main/C.gitignore
 
