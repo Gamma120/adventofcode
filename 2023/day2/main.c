@@ -3,21 +3,30 @@
 #include <string.h>
 #include <stdbool.h>
 #include <errno.h>
-#include <math.h>
 
 #include "main.h"
 
 Game *game_create(int id)
 {
-    Draw **draws;
-    draws = malloc((sizeof *draws) * INITIAL_DRAW_SIZE);
-
     Game *game;
-    game = malloc((sizeof *game));
+    game = malloc((sizeof *game) + INITIAL_DRAW_SIZE * (sizeof *game->draws));
+    if (game == NULL)
+    {
+        fprintf(stderr, "Error while malloc: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
 
     game->id = id;
     game->draw_count = 0;
     game->draw_max = INITIAL_DRAW_SIZE;
+
+    Draw *draws;
+    draws = calloc((sizeof *draws), INITIAL_DRAW_SIZE);
+    if (draws == NULL)
+    {
+        fprintf(stderr, "Error while malloc: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
     game->draws = draws;
 
     return game;
@@ -25,30 +34,25 @@ Game *game_create(int id)
 
 void game_destroy(Game *game)
 {
-    for (int i = 0; i < game->draw_count; i++)
-    {
-        free(game->draws[i]);
-    }
     free(game->draws);
     free(game);
 }
 
-void game_add_draw(Game *game, Draw *draw)
+void game_add_draw(Game *game, Draw draw)
 {
     if (game->draw_count == game->draw_max)
     {
-        game->draws = realloc(game->draws, (sizeof *game->draws) * game->draw_max * 2);
+        game->draws = realloc(game->draws, 2 * game->draw_max * (sizeof *game->draws));
         if (game->draws == NULL)
         {
             fprintf(stderr, "Error while realloc: %s\n", strerror(errno));
             exit(EXIT_FAILURE);
         }
 
-        game->draw_max = game->draw_max * 2;
+        game->draw_max *= 2;
     }
 
-    Draw **draw_ptr = game->draws + game->draw_count;
-    *draw_ptr = draw;
+    game->draws[game->draw_count] = draw;
     game->draw_count++;
 }
 
@@ -60,8 +64,7 @@ void game_fill(Game *game, char *line)
 
     while (draws_str != NULL)
     {
-        Draw *draw;
-        draw = calloc((sizeof *draw), 1);
+        Draw draw = {0, 0, 0};
 
         char *pick;
         pick = strsep(&draws_str, ",");
@@ -79,15 +82,15 @@ void game_fill(Game *game, char *line)
 
             if (color == 'b')
             {
-                draw->blue = n;
+                draw.blue = n;
             }
             else if (color == 'r')
             {
-                draw->red = n;
+                draw.red = n;
             }
             else if (color == 'g')
             {
-                draw->green = n;
+                draw.green = n;
             }
 
             pick = strsep(&draws_str, ",");
@@ -154,25 +157,25 @@ int main(int argc, char *argv[])
         game_fill(game, start_draws);
 
         Draw minimal;
-        minimal.blue = game->draws[0]->blue;
-        minimal.green = game->draws[0]->green;
-        minimal.red = game->draws[0]->red;
+        minimal.blue = game->draws[0].blue;
+        minimal.green = game->draws[0].green;
+        minimal.red = game->draws[0].red;
 
         bool validity = true;
         for (int i = 0; i < game->draw_count; i++)
         {
-            Draw *draw = game->draws[i];
+            Draw draw = game->draws[i];
 
-            if ((draw->blue > rule.blue) |
-                (draw->green > rule.green) |
-                (draw->red > rule.red))
+            if ((draw.blue > rule.blue) |
+                (draw.green > rule.green) |
+                (draw.red > rule.red))
             {
                 validity = false;
             }
 
-            minimal.blue = draw->blue > minimal.blue ? draw->blue : minimal.blue;
-            minimal.green = draw->green > minimal.green ? draw->green : minimal.green;
-            minimal.red = draw->red > minimal.red ? draw->red : minimal.red;
+            minimal.blue = draw.blue > minimal.blue ? draw.blue : minimal.blue;
+            minimal.green = draw.green > minimal.green ? draw.green : minimal.green;
+            minimal.red = draw.red > minimal.red ? draw.red : minimal.red;
         }
 
         if (part == 1 && validity)
